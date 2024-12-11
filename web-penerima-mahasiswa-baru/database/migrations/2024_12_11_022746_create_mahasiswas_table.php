@@ -17,7 +17,7 @@ return new class extends Migration
             ->references('IdUser')
             ->on('users')
             ->onDelete('cascade');
-            
+
             $table->foreignUuid('IdJurusan')
             ->references('IdJurusan')
             ->on('jurusans')
@@ -27,9 +27,9 @@ return new class extends Migration
             $table->string('noTelp',12);
             $table->string('jenisKelamin',6);
             $table->string('asalSekolah',30);
-            $table->date('tanggalLahir')->nullable()->default(null);
+            $table->date('tanggalLahir')->nullable();
             $table->date('tanggalBergabung')->default(now());
-            $table->date('tanggalKelulusan')->nullable()->default(null);
+            $table->date('tanggalKelulusan')->nullable();
             $table->timestamps();
         });
     }

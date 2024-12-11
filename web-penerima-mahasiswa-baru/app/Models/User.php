@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use Laravel\Sanctum\HasApiTokens;
 
-class User extends Model implements JWTSubject
+class User extends Model
 {
-    use HasUuids;
+    use HasUuids, HasApiTokens;
     protected $table = 'users';
     protected $primaryKey = 'IdUser';
     protected $fillable = [
@@ -38,6 +38,7 @@ class User extends Model implements JWTSubject
         return [
             'name' => $this->name,
             'email' => $this->email,
+            'roles' => $this->roles,
         ];
     }
 

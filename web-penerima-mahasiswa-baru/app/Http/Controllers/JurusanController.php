@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Jurusan;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class JurusanController extends Controller
 {

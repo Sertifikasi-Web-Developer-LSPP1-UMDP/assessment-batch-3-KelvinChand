@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('pengumumans', function (Blueprint $table) {
             $table->uuid('IdPengumuman')->primary();
-            $table->string('judulPengumuman',50);
-            $table->string('deskripsi');
-            $table->string('gambarPengumuman');
+            $table->string('judulPengumuman');
+            $table->string('deskripsi')->nullable();
+            $table->string('gambarPengumuman')->nullable();
             $table->date('tanggalPengumuman')->default(now());
             $table->timestamps();
         });

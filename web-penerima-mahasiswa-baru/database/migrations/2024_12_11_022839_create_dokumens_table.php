@@ -18,7 +18,7 @@ return new class extends Migration
             ->on('mahasiswas')
             ->onDelete('cascade');
             $table->string('namaDokumen',30);
-            $table->string('dokumenPath');
+            $table->string('dokumenPath')->nullable();
             $table->timestamps();
         });
     }
