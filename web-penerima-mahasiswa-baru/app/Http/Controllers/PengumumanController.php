@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pengumuman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Routing\Controller;
 
 class PengumumanController extends Controller
@@ -27,13 +28,6 @@ class PengumumanController extends Controller
             }
 
             $validated = $validator->validated();
-
-            // Buat folder 'pengumuman' jika belum ada
-            $folderPath = public_path('storage/pengumuman');
-            if (!file_exists($folderPath)) {
-                mkdir($folderPath, 0777, true);
-            }
-
             $gambarPath = null;
 
             // Simpan gambar jika ada
@@ -47,7 +41,8 @@ class PengumumanController extends Controller
             $pengumuman = Pengumuman::create([
                 'judulPengumuman' => $validated['judul'],
                 'deskripsi' => $validated['deskripsi'],
-                'gambarPengumuman' => $urlGambar.$gambarPath, // Simpan path gambar
+                'gambarPengumuman' => $gambarPath,
+                'link' => $urlGambar.$gambarPath
             ]);
 
             return response()->json([
@@ -69,6 +64,7 @@ class PengumumanController extends Controller
     {
         try {
             $pengumuman = Pengumuman::all();
+            $urlGambar = 'http://127.0.0.1:8000/storage/';
             if (!$pengumuman) {
                 return response()->json([
                     'error' => 'Data pengumuman is empty',
@@ -78,6 +74,7 @@ class PengumumanController extends Controller
                 [
                     'message' => 'successfully retrieve data pengumuman',
                     'data' => $pengumuman,
+                    'link' => $urlGambar,
                 ],
                 200
             );
@@ -95,7 +92,7 @@ class PengumumanController extends Controller
     {
         try {
             $pengumuman = pengumuman::find($id);
-
+            $urlGambar = 'http://127.0.0.1:8000/storage/';
             if (!$pengumuman) {
                 return response()->json(['error' => 'pengumuman not found'], 404);
             }
@@ -104,6 +101,7 @@ class PengumumanController extends Controller
                 [
                     'message' => 'successfully retrieve pengumuman with ' . $id,
                     'data' => $pengumuman,
+                    'link' => $urlGambar.$pengumuman->gambarPengumuman,
                 ]
                 ,
                 200
@@ -121,40 +119,55 @@ class PengumumanController extends Controller
     public function update(Request $request, $id)
     {
         try {
-
-            $pengumuman = pengumuman::find($id);
+            // Cari pengumuman berdasarkan ID
+            $pengumuman = Pengumuman::find($id);
 
             if (!$pengumuman) {
-                return response()->json(['error' => 'pengumuman not found'], 404);
+                return response()->json(['error' => 'Pengumuman not found'], 404);
             }
 
+            // Validasi input
             $validator = Validator::make($request->all(), [
-                'name' => 'sometimes|required|string|max:255',
-                'email' => 'sometimes|required|email|unique:pengumumans,email,',
-                'password' => 'sometimes|required|string|min:8|confirmed',
-                'roles' => 'sometimes|in:pengumuman,admin'
+                'judul' => 'string',
+                'deskripsi' => 'string',
+                'tanggal' => 'date',
+                'gambar' => 'file|image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
             if ($validator->fails()) {
-                return response()->json($validator->errors(), 422);
+                return response()->json(['errors' => $validator->errors()], 422);
             }
 
             $validated = $validator->validated();
 
+            $gambarPath = $pengumuman->gambarPengumuman;
+            $urlGambar = 'http://127.0.0.1:8000/storage/';
+
+            // Update gambar jika ada yang baru
+            if ($request->hasFile('gambar')) {
+                if ($pengumuman->gambarPengumuman != null) {
+                    Storage::disk('public')->delete($pengumuman->gambarPengumuman);
+                }
+                $gambar = $request->file('gambar');
+                $gambarPath = $gambar->store('pengumuman', 'public');
+            }
+
+            // Perbarui pengumuman dengan data yang validasi
             $pengumuman->update([
-                'name' => $validated['name'] ?? $pengumuman->name,
-                'email' => $validated['email'] ?? $pengumuman->email,
-                'password' => isset($validated['password']),
-                'roles' => $validated['roles'] ?? $pengumuman->roles,
+                'judulPengumuman' => $validated['judul'] ?? $pengumuman->judul_pengumuman,
+                'deskripsi' => $validated['deskripsi'] ?? $pengumuman->deskripsi,
+                'tanggalPengumuman' => $validated['tanggal'] ?? $pengumuman->tanggal_pengumuman,
+                'gambarPengumuman' => $gambarPath, // Simpan path gambar
             ]);
 
             return response()->json([
-                'message' => 'pengumuman updated successfully',
-                'pengumuman' => $pengumuman
+                'message' => 'Pengumuman berhasil diperbarui',
+                'pengumuman' => $pengumuman,
+                'link' => $urlGambar.$pengumuman->gambarPengumuman
             ], 200);
         } catch (\Exception $error) {
             return response()->json([
-                'error' => $error->getMessage()
+                'error' => $error->getMessage(),
             ], 500);
         }
     }
@@ -169,10 +182,6 @@ class PengumumanController extends Controller
 
             if (!$pengumuman) {
                 return response()->json(['error' => 'pengumuman not found'], 404);
-            }
-
-            if ($pengumuman->status != 2) {
-                return response()->json(['error' => 'pengumuman account is still active'], 400);
             }
             $pengumuman->delete();
 

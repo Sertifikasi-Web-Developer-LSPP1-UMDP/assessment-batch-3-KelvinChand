@@ -26,10 +26,10 @@ Route::prefix('user')->group(function () {
 Route::prefix('pengumuman')->group(function () {
 
     Route::post('/', [PengumumanController::class, 'store'])->middleware('auth:sanctum');
-    Route::get('/', [UserController::class, 'index'])->middleware('auth:sanctum');
-    Route::get('/{id}', [UserController::class, 'show'])->middleware('auth:sanctum');
-    Route::put('/{id}', [UserController::class, 'update'])->middleware('auth:sanctum');
-    Route::delete('/{id}', [UserController::class, 'destroy'])->middleware('auth:sanctum');
+    Route::get('/', [PengumumanController::class, 'index'])->middleware('auth:sanctum');
+    Route::get('/{id}', [PengumumanController::class, 'show'])->middleware('auth:sanctum');
+    Route::post('/{id}', [PengumumanController::class, 'update'])->middleware('auth:sanctum');
+    Route::delete('/{id}', [PengumumanController::class, 'destroy'])->middleware('auth:sanctum');
 
 });
 
