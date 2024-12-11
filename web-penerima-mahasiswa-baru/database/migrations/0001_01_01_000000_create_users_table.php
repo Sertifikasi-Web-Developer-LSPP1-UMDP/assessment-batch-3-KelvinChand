@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('password');
             $table->string('roles')->default('user');
             $table->string('status',1)->default('0');
-            $table->rememberToken();
             $table->timestamps();
         });
 

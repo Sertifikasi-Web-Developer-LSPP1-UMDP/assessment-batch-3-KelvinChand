@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('mahasiswas', function (Blueprint $table) {
             $table->uuid('IdMahasiswa')->primary();
+            $table->foreignUuid('IdUser')
+            ->references('IdUser')
+            ->on('users')
+            ->onDelete('cascade');
+            
             $table->foreignUuid('IdJurusan')
             ->references('IdJurusan')
             ->on('jurusans')
