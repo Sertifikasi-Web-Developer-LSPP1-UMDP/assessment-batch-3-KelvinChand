@@ -9,6 +9,7 @@ use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DokumenController;
+use App\Http\Controllers\PembayaranController;
 
 // Routes dengan prefix 'user'
 Route::prefix('user')->group(function () {
@@ -68,4 +69,17 @@ Route::prefix('dokumen')->group(function () {
     Route::delete('/{id}', [DokumenController::class, 'destroy'])->middleware('auth:sanctum');
 
 });
+
+// Routes dengan prefix 'dokumen'
+Route::prefix('pembayaran')->group(function () {
+
+    Route::post('/', [PembayaranController::class, 'store'])->middleware('auth:sanctum');
+    Route::get('/', [PembayaranController::class, 'index'])->middleware('auth:sanctum');
+    Route::get('/{id}', [PembayaranController::class, 'show'])->middleware('auth:sanctum');
+    Route::put('/{id}', [PembayaranController::class, 'update'])->middleware('auth:sanctum');
+    Route::delete('/{id}', [PembayaranController::class, 'destroy'])->middleware('auth:sanctum');
+
+});
+
+
 
