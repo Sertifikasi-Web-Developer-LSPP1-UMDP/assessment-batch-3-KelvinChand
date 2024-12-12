@@ -29,19 +29,19 @@ class DokumenController extends Controller
 
             $validated = $validator->validated();
             $dokumenPath = null;
+            $urlDokumen = 'http://127.0.0.1:8000/storage/';
 
             // Simpan dokumen jika ada
             if ($request->hasFile('dokumen')) {
                 $dokumen = $request->file('dokumen');
                 $dokumenPath = $dokumen->store('dokumen', 'public');
-                $urlDokumen = 'http://127.0.0.1:8000/storage/';
             }
 
             // Simpan dokumen ke database
             $dokumen = Dokumen::create([
                 'IdMahasiswa' => $validated['IdMahasiswa'],
-                'nama' => $validated['nama'],
-                'dokumen' => $dokumenPath,
+                'namaDokumen' => $validated['nama'],
+                'dokumenPath' => $dokumenPath,
                 'link' => $urlDokumen . $dokumenPath,
             ]);
 
@@ -93,7 +93,7 @@ class DokumenController extends Controller
             if (!$dokumen) {
                 return response()->json(['error' => 'Dokumen not found'], 404);
             }
-            return response()->json(['message' => 'Successfully retrieved dokumen with ' . $id, 'data' => $dokumen, 'link' => $urlDokumen . $dokumen->dokumen,], 200);
+            return response()->json(['message' => 'Successfully retrieved dokumen with ' . $id, 'data' => $dokumen, 'link' => $urlDokumen . $dokumen->dokumenPath,], 200);
         } catch (\Exception $error) {
             return response()->json(['error' => $error->getMessage()], 500);
         }
@@ -121,26 +121,26 @@ class DokumenController extends Controller
 
             $validated = $validator->validated();
 
-            $dokumenPath = $dokumen->dokumen;
+            $path = $dokumen->dokumenPath;
             $urlDokumen = 'http://127.0.0.1:8000/storage/';
 
             if ($request->hasFile('dokumen')) {
-                if ($dokumen->dokumen != null) {
-                    Storage::disk('public')->delete($dokumen->dokumen);
+                if ($path != null) {
+                    Storage::disk('public')->delete($path);
                 }
                 $dokumenFile = $request->file('dokumen');
                 $dokumenPath = $dokumenFile->store('dokumen', 'public');
             }
 
             $dokumen->update([
-                'nama' => $validated['nama'] ?? $dokumen->nama,
-                'dokumen' => $dokumenPath,
+                'namaDokumen' => $validated['nama'] ?? $dokumen->nama,
+                'dokumenPath' => $dokumenPath,
             ]);
 
             return response()->json([
                 'message' => 'Dokumen berhasil diperbarui',
                 'dokumen' => $dokumen,
-                'link' => $urlDokumen . $dokumen->dokumen
+                'link' => $urlDokumen . $dokumen->dokumenPath
             ], 200);
         } catch (\Exception $error) {
             return response()->json([

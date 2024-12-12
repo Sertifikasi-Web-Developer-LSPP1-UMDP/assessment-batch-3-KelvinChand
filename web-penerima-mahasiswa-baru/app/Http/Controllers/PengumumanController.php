@@ -20,7 +20,7 @@ class PengumumanController extends Controller
             $validator = Validator::make($request->all(), [
                 'judul' => 'required|string',
                 'deskripsi' => 'required|string',
-                'gambar' => 'sometimes|file|image|mimes:jpeg,png,jpg|max:2048',
+                'gambar' => 'file|image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
             if ($validator->fails()) {
@@ -29,12 +29,12 @@ class PengumumanController extends Controller
 
             $validated = $validator->validated();
             $gambarPath = null;
+            $urlGambar = 'http://127.0.0.1:8000/storage/';
 
             // Simpan gambar jika ada
             if ($request->hasFile('gambar')) {
                 $gambar = $request->file('gambar');
                 $gambarPath = $gambar->store('pengumuman', 'public');
-                $urlGambar = 'http://127.0.0.1:8000/storage/';
             }
 
             // Simpan pengumuman ke database

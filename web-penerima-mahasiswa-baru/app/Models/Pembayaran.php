@@ -14,6 +14,7 @@ class Pembayaran extends Model
     protected $primaryKey = 'IdPembayaran';
     protected $foreignKey = 'IdUser';
     protected $fillable = [
+        'IdUser',
         'tanggalPembayaran',
         'nominalPembayaran',
         'status',
