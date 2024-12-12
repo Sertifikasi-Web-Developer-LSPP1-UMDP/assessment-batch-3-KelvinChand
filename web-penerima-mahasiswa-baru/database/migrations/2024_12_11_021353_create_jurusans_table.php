@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('jurusans', function (Blueprint $table) {
             $table->uuid('IdJurusan')->primary();
-            $table->string('namaJurusan',20);
+            $table->string('namaJurusan',40);
             $table->string('fakultas',40);
             $table->integer('kuota');
             $table->timestamps();

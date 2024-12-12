@@ -63,7 +63,9 @@ class AuthController extends Controller
 
             $validated = $validator->validated();
             $user = User::where('IdUser', $validated['IdUser']);
-            $user->update(['status' => $validated['status']]);
+            $user->update(
+                ['status' => $validated['status'],'email_verified_at' => now()],
+        );
 
             return response()->json([
                 'message' => 'User successfully verified',

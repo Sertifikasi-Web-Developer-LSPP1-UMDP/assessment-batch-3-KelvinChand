@@ -13,8 +13,10 @@ class Mahasiswa extends Model
     use HasUuids;
     protected $table = 'mahasiswas';
     protected $primaryKey = 'IdMahasiswa';
-    protected $foreignKey = ['IdUser', 'IdMahasiswa'];
+    protected $foreignKey = ['IdUser', 'IdJurusan'];
     protected $fillable = [
+        'IdUser',
+        'IdJurusan',
         'NPM',
         'alamat',
         'noTelp',

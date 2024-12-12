@@ -14,6 +14,7 @@ class Dokumen extends Model
     protected $primaryKey = 'IdDokumen';
     protected $foreignKey = 'IdMahasiswa';
     protected $fillable = [
+        'IdMahasiswa',
         'namaDokumen',
         'dokumenPath',
     ];

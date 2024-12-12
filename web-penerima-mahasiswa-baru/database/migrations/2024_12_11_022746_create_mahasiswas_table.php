@@ -14,15 +14,18 @@ return new class extends Migration
         Schema::create('mahasiswas', function (Blueprint $table) {
             $table->uuid('IdMahasiswa')->primary();
             $table->foreignUuid('IdUser')
+            ->nullable()
             ->references('IdUser')
             ->on('users')
             ->onDelete('cascade');
 
             $table->foreignUuid('IdJurusan')
+            ->nullable()
             ->references('IdJurusan')
             ->on('jurusans')
             ->onDelete('cascade');
-            $table->string('NPM', 10);
+            $table->string('status','1')->default(0);
+            $table->string('NPM', 20);
             $table->string('alamat',50);
             $table->string('noTelp',12);
             $table->string('jenisKelamin',6);
