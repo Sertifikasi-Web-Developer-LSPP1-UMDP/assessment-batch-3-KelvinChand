@@ -64,3 +64,95 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+# Penerimaan Mahasiswa Baru
+
+Welcome to the Penerimaan Mahasiswa Baru project! This project is a web application for managing new student admissions. It includes a backend API built with Laravel and a frontend using Bootstrap, jQuery, Alpine.js, and AJAX.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Documentation](#api-documentation)
+- [Frontend](#frontend)
+- [Commands](#commands)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Installation
+
+### Backend
+
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/Sertifikasi-Web-Developer-LSPP1-UMDP/assessment-batch-3-KelvinChand.git
+    cd assessment-batch-3-KelvinChand/web-penerima-mahasiswa-baru
+    ```
+
+2. Install the dependencies:
+    ```bash
+    composer install
+    ```
+
+3. Copy the `.env.example` file to `.env` and configure your environment variables:
+    ```bash
+    cp .env.example .env
+    ```
+
+4. Generate the application key:
+    ```bash
+    php artisan key:generate
+    ```
+
+5. Run the migrations and seed the database:
+    ```bash
+    php artisan migrate --seed
+    ```
+
+6. Start the development server:
+    ```bash
+    php artisan serve
+    ```
+
+### Frontend
+
+1. Install the frontend dependencies:
+    ```bash
+    npm install
+    ```
+
+2. Build the frontend assets:
+    ```bash
+    npm run dev
+    ```
+
+## Usage
+
+### Backend
+
+The backend API is built with Laravel and provides endpoints for managing users, students, and announcements. You can interact with the API using tools like Postman or through the frontend application.
+
+### Frontend
+
+The frontend is built using Bootstrap 4.5.2, jQuery, Alpine.js, and AJAX. It provides a user-friendly interface for interacting with the backend API.
+
+## API Documentation
+
+### Endpoints
+
+- **User Registration**: `POST /api/register`
+- **User Login**: `POST /api/login`
+- **Get User Info**: `GET /api/user/{id}`
+- **Create Announcement**: `POST /api/announcements`
+- **Get Announcements**: `GET /api/announcements`
+
+### Example Request
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/register \
+    -H "Content-Type: application/json" \
+    -d '{
+        "name": "John Doe",
+        "email": "john@example.com",
+        "password": "password"
+    }'
